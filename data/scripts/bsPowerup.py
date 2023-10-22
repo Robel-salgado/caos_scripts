@@ -1,5 +1,9 @@
 import bs
 import random
+import bsUtils
+import settings
+import BuddyBunny
+import bsSpaz
 
 defaultPowerupInterval = 8000
 
@@ -132,6 +136,8 @@ class PowerupFactory(object):
         self.texCurse = bs.getTexture("powerupCurse")
         self.texTroll = bs.getTexture("achievementOffYouGo")
         self.texBot = bs.getTexture('star')
+        self.texRchar = bs.getTexture("achievementEmpty")
+        self.texBunny = bs.getTexture('achievementFreeLoader')
 
         self.healthPowerupSound = bs.getSound("healthPowerup")
         self.powerupSound = bs.getSound("powerup01")
@@ -255,6 +261,10 @@ class Powerup(bs.Actor):
             tex = factory.texTroll
         elif powerupType == 'Bot':
             tex = factory.texBot
+         elif powerupType == 'Rchar':
+            tex = factory.texRchar
+        elif powerupType == 'Bunny':
+            tex = factory.texBunny
         else:
             raise Exception("invalid powerupType: "+str(powerupType))
 
@@ -319,7 +329,15 @@ class Powerup(bs.Actor):
             if not self._powersGiven:
                 node = bs.getCollisionInfo("opposingNode")
                 if node is not None and node.exists():
-                    node.handleMessage(PowerupMessage(self.powerupType,
+                    if self.powerupType == 'Bunny':
+                        p = node.getDelegate().getPlayer()
+                        if 'bunnies' not in p.gameData:
+                            p.gameData['bunnies'] = BuddyBunny.BunnyBotSet(p)
+                        p.gameData['bunnies'].doBunny()
+                        self._powersGiven = True
+                        self.handleMessage(bs.DieMessage())
+                    else:
+                        node.handleMessage(PowerupMessage(self.powerupType,
                                                       sourceNode=self.node))
 
         elif isinstance(msg, bs.DieMessage):

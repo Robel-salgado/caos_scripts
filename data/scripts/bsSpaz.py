@@ -1053,14 +1053,35 @@ class Spaz(bs.Actor):
                 p = self.node.position
                 pos = (p[0], p[1] + 2, p[2])
                 botMod.Bot(pos = pos, sourcePlayer = self.sourcePlayer).autoRetain() 
-                bs.getSharedObject('globals').tint = (0.6,0.6,0.9)
                 light = bs.newNode('light',
                                attrs={'position':self.node.position,
-                                      'radius':0.5,
+                                      'radius':0.1,
                                       'heightAttenuated':False,
                                       'color': (0,1,6)})
                 bs.animate(light,'radius',{0:3.0,300:5,600:0})  
-                bs.emitBGDynamics(position=self.node.position,velocity=(0,0,0),count=600,spread=0.7,chunkType='spark')    
+                bs.emitBGDynamics(position=self.node.position,velocity=(0,0,0),count=100,spread=0.7,chunkType='spark')
+
+            elif msg.powerupType == 'Rchar':
+                t = self.node
+                lst = ['ali','wizard','cyborg','penguin','agent','pixie','bear','bunny']
+                rchars = random.choice(lst)
+                g = bs.getGameTime()
+                def charChange(val):
+                    if val:
+                        t.colorTexture = bs.getTexture(rchars+'Color')
+                        t.colorMaskTexture = bs.getTexture(rchars+'ColorMask')
+                        t.headModel = bs.getModel(rchars+'Head')
+                        t.torsoModel = bs.getModel(rchars+'Torso')
+                        t.pelvisModel = bs.getModel(rchars+'Pelvis')
+                        t.upperArmModel = bs.getModel(rchars+'UpperArm')
+                        t.foreArmModel = bs.getModel(rchars+'ForeArm')
+                        t.handModel = bs.getModel(rchars+'Hand')
+                        t.upperLegModel = bs.getModel(rchars+'LowerLeg')
+                        t.lowerLegModel = bs.getModel(rchars+'Toes')
+                        t.toesModel = bs.getModel(rchars+'Toes')
+                        t.style = rchars
+                charChange(True)
+                bsUtils.PopupText(u"\ue00c YAY! \ue00c",color = self.node.color,scale = 1.7,position = self.node.position).autoRetain()        
             
             self.node.handleMessage("flash")
             if msg.sourceNode.exists():
