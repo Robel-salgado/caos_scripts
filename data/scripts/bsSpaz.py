@@ -1,9 +1,10 @@
 import weakref
 import random
-
+import settings
 import bs
 import bsUtils
 import bsInternal
+import botMod
 
 # list of defined spazzes
 appearances = {}
