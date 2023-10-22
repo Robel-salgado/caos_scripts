@@ -261,7 +261,7 @@ class Powerup(bs.Actor):
             tex = factory.texTroll
         elif powerupType == 'Bot':
             tex = factory.texBot
-         elif powerupType == 'Rchar':
+        elif powerupType == 'Rchar':
             tex = factory.texRchar
         elif powerupType == 'Bunny':
             tex = factory.texBunny
