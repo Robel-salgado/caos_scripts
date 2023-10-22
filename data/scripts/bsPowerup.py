@@ -130,6 +130,8 @@ class PowerupFactory(object):
         self.texHealth = bs.getTexture("powerupHealth")
         self.texLandMines = bs.getTexture("powerupLandMines")
         self.texCurse = bs.getTexture("powerupCurse")
+        self.texTroll = bs.getTexture("achievementOffYouGo")
+        self.texBot = bs.getTexture('star')
 
         self.healthPowerupSound = bs.getSound("healthPowerup")
         self.powerupSound = bs.getSound("powerup01")
@@ -249,6 +251,10 @@ class Powerup(bs.Actor):
             tex = factory.texHealth
         elif powerupType == 'curse':
             tex = factory.texCurse
+        elif powerupType == 'Troll':
+            text = factory.texTroll
+        elif powerupType == 'Bot':
+            text = factory.texBot
         else:
             raise Exception("invalid powerupType: "+str(powerupType))
 

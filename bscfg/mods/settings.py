@@ -81,7 +81,7 @@ availableEffects = {'ice': 500,
 
 nameOnPowerUps = False  # Whether or not to show the powerup's name on top of powerups
 
-shieldOnPowerUps = True  # Whether or not to add shield on powerups
+shieldOnPowerUps = False  # Whether or not to add shield on powerups
 
 # Whether or not to show disco lights on powerup's location
 discoLightsOnPowerUps = False
@@ -98,7 +98,9 @@ dist = (('tripleBombs', 1),
         ('stickyBombs', 1),
         ('shield', 0),
         ('health', 1),
-        ('curse', 0))
+        ('curse', 0),
+        ('Troll', 1),
+        ('Bot', 1))
 
 
 def return_yielded_game_texts():
