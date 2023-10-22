@@ -252,9 +252,9 @@ class Powerup(bs.Actor):
         elif powerupType == 'curse':
             tex = factory.texCurse
         elif powerupType == 'Troll':
-            text = factory.texTroll
+            tex = factory.texTroll
         elif powerupType == 'Bot':
-            text = factory.texBot
+            tex = factory.texBot
         else:
             raise Exception("invalid powerupType: "+str(powerupType))
 
