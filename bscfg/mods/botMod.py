@@ -41,7 +41,7 @@ class Bot(bs.Actor):
 			'extraAcceleration':(0, 20, 0),
                         'materials':[bs.getSharedObject("objectMaterial")]
 		})
-		bs.gameTimer(3000, bs.WeakCall(self.handleMessage, bs.DieMessage()))
+		bs.gameTimer(30000, bs.WeakCall(self.handleMessage, bs.DieMessage()))
 		self._updTimer = bs.Timer(500, bs.WeakCall(self._update), repeat = True)
 	
 	def _update(self):
