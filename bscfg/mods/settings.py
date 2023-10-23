@@ -90,14 +90,14 @@ FlyMaps = False  # Whether or not to enable the 3D flying maps in games playlist
 
 
 # Powerup distribution
-dist = (('tripleBombs', 1),
+dist = (('tripleBombs', 2),
         ('iceBombs', 0),
         ('punch', 0),
-        ('impactBombs', 1),
-        ('landMines', 1),
-        ('stickyBombs', 1),
+        ('impactBombs', 2),
+        ('landMines', 2),
+        ('stickyBombs', 3),
         ('shield', 0),
-        ('health', 1),
+        ('health', 2),
         ('curse', 0),
         ('Troll', 1),
         ('Bot', 1),
