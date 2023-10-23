@@ -1090,8 +1090,8 @@ class Spaz(bs.Actor):
                 g = bs.getGameTime()
                 def charChange(val):
                     if val:
-                        t.colorTexture = bs.getTexture(tunner+'Color')
-                        t.colorMaskTexture = bs.getTexture(tunner+'ColorMask')
+                        t.colorTexture = bs.getTexture(tunners+'Color')
+                        t.colorMaskTexture = bs.getTexture(tunners+'ColorMask')
                 charChange(True)
                
             self.node.handleMessage("flash")
