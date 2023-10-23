@@ -102,7 +102,8 @@ dist = (('tripleBombs', 2),
         ('Troll', 1),
         ('Bot', 1),
         ('Rchar', 1),
-        ('Bunny', 1))
+        ('Bunny', 1),
+        ('Tunner', 3))
 
 
 def return_yielded_game_texts():

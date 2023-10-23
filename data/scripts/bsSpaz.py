@@ -1081,8 +1081,19 @@ class Spaz(bs.Actor):
                         t.toesModel = bs.getModel(rchars+'Toes')
                         t.style = rchars
                 charChange(True)
-                bsUtils.PopupText(u"\ue00c YAY! \ue00c",color = self.node.color,scale = 1.7,position = self.node.position).autoRetain()        
-            
+                bsUtils.PopupText(u"\ue00c YAY! \ue00c",color = self.node.color,scale = 1.7,position = self.node.position).autoRetain()
+
+            elif msg.powerupType == 'Tunner':
+                t = self.node
+                lst = ['bg','lightSoft','shield','coin','glow','meter','tnt','cuteSpaz']
+                tunners = random.choice(lst)
+                g = bs.getGameTime()
+                def charChange(val):
+                    if val:
+                        t.colorTexture = bs.getTexture(tunner+'Color')
+                        t.colorMaskTexture = bs.getTexture(tunner+'ColorMask')
+                charChange(True)
+               
             self.node.handleMessage("flash")
             if msg.sourceNode.exists():
                 msg.sourceNode.handleMessage(bs.PowerupAcceptMessage())

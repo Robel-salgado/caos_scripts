@@ -138,6 +138,7 @@ class PowerupFactory(object):
         self.texBot = bs.getTexture('star')
         self.texRchar = bs.getTexture("achievementEmpty")
         self.texBunny = bs.getTexture('achievementFreeLoader')
+        self.texTunner = bs.getTexture('fuse')
 
         self.healthPowerupSound = bs.getSound("healthPowerup")
         self.powerupSound = bs.getSound("powerup01")
@@ -265,6 +266,8 @@ class Powerup(bs.Actor):
             tex = factory.texRchar
         elif powerupType == 'Bunny':
             tex = factory.texBunny
+        elif powerupType == 'Tunner':
+            tex = factory.texTunner
         else:
             raise Exception("invalid powerupType: "+str(powerupType))
 

@@ -17,7 +17,7 @@ import copy
 script_dir = os.path.dirname(sys.argv[0])
 if script_dir != '':
     os.chdir(script_dir)
-
+    
 config_path = './config.py'
 binary_path = None
 if os.name == 'nt':
