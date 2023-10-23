@@ -6,10 +6,10 @@ import math
 class BotFactory(object):
 	
 	def __init__(self):
-		self.botModel = bs.getModel("stickyBomb")
-		self.botTexture = bs.getTexture("tnt")
-		self.targetSound = bs.getSound("warnBeeps")
-		self.popSound = bs.getSound("penguinHit1")
+		self.botModel = bs.getModel("bonesHead")
+		self.botTexture = bs.getTexture("bg")
+		self.targetSound = bs.getSound("sparkle01")
+		self.popSound = bs.getSound("pop01")
 	
 class Bot(bs.Actor):
 	

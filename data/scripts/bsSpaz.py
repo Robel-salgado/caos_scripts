@@ -1049,7 +1049,7 @@ class Spaz(bs.Actor):
                     self.node.handleMessage(bs.FreezeMessage())
                     bsUtils.PopupText(u"\ue00c Freezy \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
             elif msg.powerupType == 'Bot':
-                bsUtils.PopupText(u"\ue00c By PcModder \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
+                bsUtils.PopupText(u"\ue00c correle \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 p = self.node.position
                 pos = (p[0], p[1] + 2, p[2])
                 botMod.Bot(pos = pos, sourcePlayer = self.sourcePlayer).autoRetain() 
@@ -1058,8 +1058,8 @@ class Spaz(bs.Actor):
                                       'radius':0.1,
                                       'heightAttenuated':False,
                                       'color': (0,1,6)})
-                bs.animate(light,'radius',{0:3.0,300:5,600:0})  
-                bs.emitBGDynamics(position=self.node.position,velocity=(0,0,0),count=100,spread=0.7,chunkType='spark')
+                # bs.animate(light,'radius',{0:3.0,300:5,600:0})  
+                # bs.emitBGDynamics(position=self.node.position,velocity=(0,0,0),count=100,spread=0.7,chunkType='spark')
 
             elif msg.powerupType == 'Rchar':
                 t = self.node
