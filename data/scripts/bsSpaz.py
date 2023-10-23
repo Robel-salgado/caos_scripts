@@ -1092,7 +1092,6 @@ class Spaz(bs.Actor):
                     if val:
                         t.colorTexture = bs.getTexture(tunners)
                         t.colorMaskTexture = bs.getTexture(tunners)
-                        t.reflectionScale = "10, 10, 0"
                 charChange(True)
                
             self.node.handleMessage("flash")
