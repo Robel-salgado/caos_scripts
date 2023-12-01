@@ -13,7 +13,7 @@ class BunnyBuddyBot(bsSpaz.SpazBot):
 
     color=(1,1,1)
     highlight=(1.0,0.5,0.5)
-    character = 'Easter Bunny'
+    character = 'santa'
     punchiness = 1.0
     run = True
     bouncy = True

@@ -811,9 +811,9 @@ class ThePadMap(Map):
             'background':True,
             'colorTexture':self.preloadData['vrFillMoundTex']})
         bsGlobals = bs.getSharedObject('globals')
-        bsGlobals.tint = (1.2, 1.3, 1.4)
+        bsGlobals.tint = (1.1, 1.1, 1.0)
         bsGlobals.ambientColor = (1.1, 1.1, 1.0)
-        bsGlobals.vignetteOuter = (0.9, 0.9, 0.9)
+        bsGlobals.vignetteOuter = (0.7, 0.65, 0.75)
         bsGlobals.vignetteInner = (0.95, 0.95, 0.93)
 
 registerMap(ThePadMap)

@@ -1037,17 +1037,17 @@ class Spaz(bs.Actor):
                 lst = [1,2,3,4]
                 t_no = random.choice(lst)
                 if t_no == 1:
-                    self.curse()
-                    bsUtils.PopupText(u"\ue00c Cursed \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
-                elif t_no == 2:
                     self.setBombCount(2)
                     bsUtils.PopupText(u"\ue00c Two Bombs \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
-                elif t_no == 3:
+                elif t_no == 2:
                     self.node.style = 'pixie'
                     bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
+                elif t_no == 3:
+                    self.node.style = 'santa'
+                    bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
                 elif t_no == 4:
-                    self.node.handleMessage(bs.FreezeMessage())
-                    bsUtils.PopupText(u"\ue00c Freezy \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
+                    self.node.style = 'frosty'
+                    bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
             elif msg.powerupType == 'Bot':
                 bsUtils.PopupText(u"\ue00c correle \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 p = self.node.position
