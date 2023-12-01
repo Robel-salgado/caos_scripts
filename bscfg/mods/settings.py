@@ -35,7 +35,8 @@ gameTexts = ['Welcome To Blitz Server', 'Use "/shop commands" to see commands av
     'ticket')+' and your stats in this server', 'Use "/buy" to buy effects that you like', 'Use "/donate" to give some of your tickets to other players', 'Use "/scoretocash" to convert some of your score to '+bs.getSpecialChar('ticket')+'\nCurrent Rate: 5scores = '+bs.getSpecialChar('ticket')+'1']
 
 questionDelay = 90  # 60 #seconds
-questionsList = {'esta en el final del sol y el comienzo de la luna?': 'l', 'todos lo tenemos atras es arrugado comienza con "C" y termina con "O"?': 'codo', 'entra duro, seco y sale mojado, blando?': 'chicle', 'blanco por dentro verde por afuera?, si no sabes espera...': 'pera',
+questionsList = {'Que fruta se come en nochevieja?': 'uvas', 'Que les dejamos a los reyes magos?': 'turrones y agua', 'Nombre del tercer rey mago?': 'Baltasar', 'Dulce hecho de almendras, miel y azucar. Tambien se puede hacer de chocolate.': 'turron',
+                 'Que empresa suele utilizar a Papa Noel en su marketing?': 'coca-cola',
                  'add': None,
                  'multiply': None}
 
