@@ -1034,20 +1034,17 @@ class Spaz(bs.Actor):
                 self._numTimesHit = 0
 
             elif msg.powerupType == 'Troll':
-                lst = [1,2,3,4]
+                lst = [1,2,3]
                 t_no = random.choice(lst)
                 if t_no == 1:
                     self.setBombCount(2)
-                    bsUtils.PopupText(u"\ue00c Two Bombs \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
+                    bsUtils.PopupText(u"\ue00c Bombs x 2\ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 elif t_no == 2:
                     self.node.style = 'pixie'
                     bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 elif t_no == 3:
-                    self.node.style = 'santa'
-                    bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
-                elif t_no == 4:
-                    self.node.style = 'frosty'
-                    bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
+                    self.node.style = 'female'
+                    bsUtils.PopupText(u"\ue00c zoe's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
             elif msg.powerupType == 'Bot':
                 bsUtils.PopupText(u"\ue00c correle \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 p = self.node.position
