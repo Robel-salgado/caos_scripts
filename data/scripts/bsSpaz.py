@@ -1040,9 +1040,6 @@ class Spaz(bs.Actor):
                     self.setBombCount(2)
                     bsUtils.PopupText(u"\ue00c Bombs x 2\ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
                 elif t_no == 2:
-                    self.node.style = 'pixie'
-                    bsUtils.PopupText(u"\ue00c Pixie's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()
-                elif t_no == 3:
                     self.node.style = 'female'
                     bsUtils.PopupText(u"\ue00c zoe's Cousin \ue00c", color = self.node.color,scale = 1.7, position = self.node.position).autoRetain()   
             elif msg.powerupType == 'Bot':
