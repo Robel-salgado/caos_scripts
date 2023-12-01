@@ -95,15 +95,15 @@ dist = (('tripleBombs', 2),
         ('punch', 0),
         ('impactBombs', 2),
         ('landMines', 2),
-        ('stickyBombs', 3),
+        ('stickyBombs', 2),
         ('shield', 0),
         ('health', 2),
         ('curse', 0),
         ('Troll', 1),
-        ('Bot', 1),
-        ('Rchar', 1),
+        ('Bot', 0),
+        ('Rchar', 0),
         ('Bunny', 1),
-        ('Tunner', 3))
+        ('Tunner', 0))
 
 
 def return_yielded_game_texts():

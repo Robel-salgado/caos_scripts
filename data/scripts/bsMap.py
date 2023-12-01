@@ -627,6 +627,14 @@ class RoundaboutMap(Map):
             'materials':[bs.getSharedObject('railingMaterial')],
             'bumper':True})
         bsGlobals = bs.getSharedObject('globals')
+
+        def snowfall():
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
+        
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (1.0, 1.05, 1.1)
         bsGlobals.ambientColor = (1.0, 1.05, 1.1)
         bsGlobals.shadowOrtho = True
@@ -819,12 +827,14 @@ class ThePadMap(Map):
             'background':True,
             'colorTexture':self.preloadData['vrFillMoundTex']})
         bsGlobals = bs.getSharedObject('globals')
+
         def snowfall():
-            p = (-10+(random.random()*15),15,-10+(random.random()*30))
-            v = ((-5.0+random.random()*15.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
-            bs.emitBGDynamics(position=p,velocity=v,count=3,scale=1+random.random(),spread=0,chunkType='spark')
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
         bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (1.1, 1.1, 1.0)
         bsGlobals.ambientColor = (1.1, 1.1, 1.0)
         bsGlobals.vignetteOuter = (0.7, 0.65, 0.75)
@@ -881,6 +891,14 @@ class DoomShroomMap(Map):
             'materials':[bs.getSharedObject('footingMaterial'),
                          bs.getSharedObject('deathMaterial')]})
         bsGlobals = bs.getSharedObject('globals')
+
+        def snowfall():
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
+        
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (0.82, 1.10, 1.15)
         bsGlobals.ambientColor = (0.9, 1.3, 1.1)
         bsGlobals.shadowOrtho = False
@@ -1290,6 +1308,14 @@ class StepRightUpMap(Map):
             'background':True,
             'colorTexture':self.preloadData['bgTex']})
         bsGlobals = bs.getSharedObject('globals')
+
+        def snowfall():
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
+        
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (1.2, 1.1, 1.0)
         bsGlobals.ambientColor = (1.2, 1.1, 1.0)
         bsGlobals.vignetteOuter = (0.7, 0.65, 0.75)
@@ -1362,6 +1388,14 @@ class CourtyardMap(Map):
                 'affectBGDynamics':False,
                 'materials':[self.preloadData['playerWallMaterial']]})
         bsGlobals = bs.getSharedObject('globals')
+
+        def snowfall():
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
+        
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (1.2, 1.17, 1.1)
         bsGlobals.ambientColor = (1.2, 1.17, 1.1)
         bsGlobals.vignetteOuter = (0.6, 0.6, 0.64)
@@ -1434,6 +1468,14 @@ class RampageMap(Map):
             'materials':[bs.getSharedObject('railingMaterial')],
             'bumper':True})
         bsGlobals = bs.getSharedObject('globals')
+
+        def snowfall():
+            p = (-10+(random.random()*30),15,-10+(random.random()*30))
+            v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
+            bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
+        
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+
         bsGlobals.tint = (1.2, 1.1, 0.97)
         bsGlobals.ambientColor = (1.3, 1.2, 1.03)
         bsGlobals.vignetteOuter = (0.62, 0.64, 0.69)
