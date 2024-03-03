@@ -28,11 +28,20 @@ roles = storage.roles
 
 
 def accountIDFromClientID(n):
-    for i in bsInternal._getForegroundHostActivity().players:
-        if i.getInputDevice().getClientID() == n:
-            return i.get_account_id()
+    if n.isdigit():
+        if len(n) == 3:
+            for i in bsInternal._getForegroundHostActivity().players:
+                if str(i.getInputDevice().getClientID()) == n:
+                    return i.get_account_id()
+        if len(n) == 2:
+            for i in bsInternal._getForegroundHostActivity().players:
+                if str(i.getInputDevice().getClientID()) == n:
+                    return i.get_account_id()
+                
+        if int(n) < len(bsInternal._getForegroundHostActivity().players):
+            return bsInternal._getForegroundHostActivity().players[int(n)].get_account_id()
     else:
-        return None
+        return
 
 
 def getDisplayString(n):
@@ -49,8 +58,15 @@ def playerFromClientID(n):
             for i in bsInternal._getForegroundHostActivity().players:
                 if str(i.getInputDevice().getClientID()) == n:
                     return i
+        if len(n) == 2:
+            for i in bsInternal._getForegroundHostActivity().players:
+                if str(i.getInputDevice().getClientID()) == n:
+                    return i
+                
         if int(n) < len(bsInternal._getForegroundHostActivity().players):
             return bsInternal._getForegroundHostActivity().players[int(n)]
+    else:
+        return
 
 
 class Custom(object):
