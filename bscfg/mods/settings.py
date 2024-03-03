@@ -4,6 +4,10 @@ from terminal import Colors
 from datetime import datetime
 date = datetime.now().strftime('%d')
 
+
+# Add New Prefix Commands:
+prefixComand = ('/', '.', '-', '*', ',', '#')
+
 enableTop5effects = True
 enableTop5commands = False
 enableCoinSystem = True

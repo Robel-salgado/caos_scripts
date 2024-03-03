@@ -26,22 +26,29 @@ stats = logger.stats
 pStats = logger.pStats
 roles = storage.roles
 
-
+def extract_command(msg):
+    for prefix in prefixComand:
+        if msg.startswith(prefix):
+            return msg[len(prefix):].split(' ')[0].lower() # lower() Por si Escriben en Mayusculas...
+    return
+            
 def accountIDFromClientID(n):
-    if n.isdigit():
-        if len(n) == 3:
-            for i in bsInternal._getForegroundHostActivity().players:
-                if str(i.getInputDevice().getClientID()) == n:
-                    return i.get_account_id()
-        if len(n) == 2:
-            for i in bsInternal._getForegroundHostActivity().players:
-                if str(i.getInputDevice().getClientID()) == n:
-                    return i.get_account_id()
-                
-        if int(n) < len(bsInternal._getForegroundHostActivity().players):
-            return bsInternal._getForegroundHostActivity().players[int(n)].get_account_id()
-    else:
-        return
+    """retorna el account_id del jugador"""
+    if len(n) == 3:
+        for i in bsInternal._getForegroundHostActivity().players:
+            if int(i.getInputDevice().getClientID()) == int(n):
+                return i.get_account_id()
+            
+    if len(n) == 2:
+        for i in bsInternal._getForegroundHostActivity().players:
+            if int(i.getInputDevice().getClientID()) == int(n):
+                return i.get_account_id()
+            
+    if int(n) < len(bsInternal._getForegroundHostActivity().players):
+        return bsInternal._getForegroundHostActivity().players[int(n)].get_account_id()
+    
+    
+    return
 
 
 def getDisplayString(n):
@@ -155,12 +162,12 @@ class chatOptions(object):
         global pStats
         global roles
         try:
-            m = msg.split(' ')[0]
+            m = extract_command(msg)
             a = msg.split(' ')[1:]
             activity = bsInternal._getForegroundHostActivity()
             with bs.Context(activity):
                 level = self.checkDevice(clientID, m)
-                if m in ('/stats', '/rank', '/myself', '/me'):
+                if m in ('stats', 'rank', 'myself', 'me'):
                     for player in activity.players:
                         if player.getInputDevice().getClientID() == clientID:
                             f = open(pStats, 'r')
@@ -184,7 +191,7 @@ class chatOptions(object):
                             f.close()
                             break
 
-                elif (m == '/emote') or (m == '/em'):
+                elif (m == 'emote') or (m == 'em'):
                     if a == []:
                         bs.screenMessage(
                             "Available Emotes fire, angry, lol, dead, huh, what, power")
@@ -215,30 +222,39 @@ class chatOptions(object):
                     bsUtils.PopupText(ptxt,
                                       scale=2.0,
                                       position=CidToActor(clientID).node.position).autoRetain()
-                elif m == '/teamName' and level > 2:
+                elif m == 'teamName' and level > 2:
                     if a == []:
-                        bs.screenMessage("Try /teamName Red Blue")
+                        bs.screenMessage("Try teamName Red Blue")
                         bsInternal._chatMessage(
                             u"Few Emotes \U0001F480,\ue00c,\ue048,\ue046,\ue043")
                     else:
                         cmdsetg.tN(a[0], a[1])
                         commandSuccess = True
 
-                elif m == '/addcoin' and level > 4:
+                elif m == 'addcoin' and level > 4:
                     if a == []:
                         bs.screenMessage(
                             "Format: /addcoin <clientID> <amount> or /addcoin <amount> for myself")
                     else:
-                        if len(a) < 2:
-                            n = accountIDFromClientID(a[0])
+                        message = ""
+                        if len(a) == 1:
+                            n = accountIDFromClientID(clientID)
+                            coinSystem.addCoins(n, int(a[0]))
+                            message = "Se han Depositado {} a tu Banco.".format(int(a[0]))
+                        elif len(a) == 2:
+                            n = accountIDFromClientID(int(a[0]))
+                            n2 = playerFromClientID(a[0])
                             coinSystem.addCoins(n, int(a[1]))
-                            bs.screenMessage(
-                                "Se ha depositado " + a[1] + " a tu cuenta Exitosamente!")
+                            message = "Se han Depositado {} Para {}.".format(int(a[1]), n2.getName())
+                        else:
+                            message = "Error Player no Encontrado."
+                            return
+                        
+                        bs.screenMessage(message)
+                            
                         
 
-
-
-                elif m == '/floater' and level > 2:
+                elif m == 'floater' and level > 2:
                     playerlist = bsInternal._getForegroundHostActivity(
                     ).players
                     if not hasattr(bsInternal._getForegroundHostActivity(),
@@ -289,7 +305,7 @@ class chatOptions(object):
                             i.assignInputCall('leftRight',
                                               floaters.leftright)
 
-                elif m == '/perk':
+                elif m == 'perk':
                     if a == []:
                         bs.screenMessage("Try /perk heal, damage , health")
                     for i in bsInternal._getForegroundHostSession().players:
@@ -322,7 +338,7 @@ class chatOptions(object):
                             else:
                                 bs.screenMessage("You Are Not Yet Registerd")
 
-                elif m == '/smg':
+                elif m == 'smg':
                     ptxt = str(a[0])
 
                     def CidToActor(cid):
@@ -337,7 +353,7 @@ class chatOptions(object):
                     bsUtils.PopupText(ptxt,
                                       scale=2.0,
                                       position=CidToActor(clientID).node.position).autoRetain()
-                elif m == '/donate' and enableCoinSystem:
+                elif m == 'donate' and enableCoinSystem:
                     try:
                         if len(a) < 2:
                             bs.screenMessage(
@@ -379,7 +395,7 @@ class chatOptions(object):
                         bs.screenMessage('Usage: /donate amount clientID',
                                          transient=True, clients=[clientID])
 
-                elif m == '/buy' and enableCoinSystem:
+                elif m == 'buy' and enableCoinSystem:
                     if a == []:
                         bsInternal._chatMessage('Usaage: /buy item_name')
                     elif a[0] in availableEffects:
@@ -420,7 +436,7 @@ class chatOptions(object):
                                 bsInternal._chatMessage('You need ' + bs.getSpecialChar('ticket') + str(
                                     costOfEffect) + ' for that. You have ' + bs.getSpecialChar('ticket') + str(haveCoins) + ' only.')
 
-                elif m == '/list':
+                elif m == 'list':
                     # string = u'==Name========ClientID====PlayerID==\n'
                     string = u'{0:^16}{1:^15}{2:^10}\n------------------------------------------------------------------------------\n'.format(
                         'Name', 'ClientID', 'PlayerID')
@@ -432,7 +448,7 @@ class chatOptions(object):
                                      color=(1, 1, 1), clients=[clientID])
                     # print string
 
-                elif m == '/shop' and enableCoinSystem:
+                elif m == 'shop' and enableCoinSystem:
                     string = '==You can buy following items==\n'
                     if a == []:
                         bs.screenMessage('Usage: /shop commands or /shop effects', transient=True, color=(1,
@@ -458,7 +474,7 @@ class chatOptions(object):
                                 separator = '          '
                         bs.screenMessage(string, transient=True,
                                          color=(0, 1, 0), clients=[clientID])
-                elif m == '/id':
+                elif m == 'id':
                     if True:
                         clID = int(a[0])
                         for i in bsInternal._getForegroundHostActivity().players:
@@ -466,7 +482,7 @@ class chatOptions(object):
                                 bsInternal._chatMessage(
                                     i.get_account_id())
                                 commandSuccess = True
-                elif m == '/cashtoscore' and enableCoinSystem:
+                elif m == 'cashtoscore' and enableCoinSystem:
                     try:
                         coins = int(a[0])
                         for player in activity.players:
@@ -501,7 +517,7 @@ class chatOptions(object):
                                                                                                       0.1,
                                                                                                       0.1), clients=[clientID])
 
-                elif m == '/scoretocash' and enableCoinSystem:
+                elif m == 'scoretocash' and enableCoinSystem:
                     try:
                         score = int(a[0])
                         for player in activity.players:
@@ -535,13 +551,13 @@ class chatOptions(object):
                         
 
                 elif level > 0:
-                    if m == '/nv':
+                    if m == 'nv':
                         if self.tint is None:
                             self.tint = bs.getSharedObject('globals').tint
                         bs.getSharedObject('globals').tint = (0.5, 0.7, 1) if a == [
                         ] or not a[0] == 'off' else self.tint
                         commandSuccess = True
-                    elif m == '/ooh':
+                    elif m == 'ooh':
                         if a is not None and len(a) > 0:
                             s = 1
                             #int(a[0])
@@ -558,7 +574,7 @@ class chatOptions(object):
                         else:
                             bs.playSound(bs.getSound('ooh'), volume=2)
                         commandSuccess = True
-                    elif m == '/playSound':
+                    elif m == 'playSound':
                         if a is not None and len(a) > 1:
                             s = 1
                             #int(a[1])
@@ -575,9 +591,9 @@ class chatOptions(object):
                         else:
                             bs.playSound(bs.getSound(str(a[0])), volume=2)
                         commandSuccess = True
-                    elif m in ('/box', '/boxall'):
+                    elif m in ('box', 'boxall'):
                         try:
-                            if m == '/boxall':
+                            if m == 'boxall':
                                 for i in bs.getSession().players:
                                     try:
                                         i.actor.node.torsoModel = bs.getModel(
@@ -623,12 +639,12 @@ class chatOptions(object):
                         except:
                             bs.screenMessage('Error!', color=(1, 0, 0))
 
-                    elif m in ('/spaz', '/spazall'):
+                    elif m in ('spaz', 'spazall'):
                         try:
                             if a == []:
                                 bsInternal._chatMessage(
                                     'Failed!! Usage: /spazall or /spaz number of list')
-                            elif m == '/spazall':
+                            elif m == 'spazall':
                                 for i in bs.getSession().players:
                                     a.append(a[0])
                                     t = i.actor.node
@@ -699,9 +715,9 @@ class chatOptions(object):
                         except:
                             bs.screenMessage('error', color=(1, 0, 0))
 
-                    elif m in ('/inv', '/invall'):
+                    elif m in ('inv', 'invall'):
                         try:
-                            if m == '/invall':
+                            if m == 'invall':
                                 for i in bs.getSession().players:
                                     t = i.actor.node
                                     t.headModel = None
@@ -752,8 +768,8 @@ class chatOptions(object):
                     #             p.gameData['bunnies'] = BuddyBunny.BunnyBotSet(p)
                     #         p.gameData['bunnies'].doBunny()
 
-                    elif m in ('/tex', '/texall'):
-                        if m == '/texall':
+                    elif m in ('tex', 'texall'):
+                        if m == 'texall':
                             for i in bs.getSession().players:
                                 try:
                                     i.actor.node.colorMaskTexture = bs.getTexture(
@@ -780,8 +796,8 @@ class chatOptions(object):
                                 bs.screenMessage('Error!', color=(1, 0, 0))
 
                     elif level > 1:
-                        if m in ('/freeze', '/freezeall'):
-                            if m == '/freezeall':
+                        if m in ('freeze', 'freezeall'):
+                            if m == 'freezeall':
                                 for i in bs.getSession().players:
                                     try:
                                         i.actor.node.handleMessage(
@@ -802,8 +818,8 @@ class chatOptions(object):
                                     bsInternal._chatMessage(
                                         'Failed!! Usage: /freezeall or /freeze number of list')
 
-                        elif m in ('/thaw', '/thawall'):
-                            if m == '/thawall':
+                        elif m in ('thaw', 'thawall'):
+                            if m == 'thawall':
                                 for i in bs.getSession().players:
                                     try:
                                         i.actor.node.handleMessage(
@@ -824,8 +840,8 @@ class chatOptions(object):
                                     bsInternal._chatMessage(
                                         'Failed!! Usage: /thawall or /thaw number of list')
 
-                        elif m in ('/sleep', '/sleepall'):
-                            if m == '/sleepall':
+                        elif m in ('sleep', 'sleepall'):
+                            if m == 'sleepall':
                                 for i in bs.getSession().players:
                                     try:
                                         i.actor.node.handleMessage(
@@ -846,8 +862,8 @@ class chatOptions(object):
                                     bsInternal._chatMessage(
                                         'Failed!! Usage: /sleepall or /sleep number of list')
 
-                        elif m in ('/kill', '/killall'):
-                            if m == '/killall':
+                        elif m in ('kill', 'killall'):
+                            if m == 'killall':
                                 for i in bs.getSession().players:
                                     try:
                                         i.actor.node.handleMessage(
@@ -868,7 +884,7 @@ class chatOptions(object):
                                     bsInternal._chatMessage(
                                         'Failed!! Usage: /killall or /kill number of list')
 
-                        elif m == '/curse':
+                        elif m == 'curse':
                             if a == []:
                                 bsInternal._chatMessage(
                                     'Using: /curse all or number of list')
@@ -888,12 +904,12 @@ class chatOptions(object):
                                 except:
                                     pass
 
-                        elif m == '/sm':
+                        elif m == 'sm':
                             bs.getSharedObject('globals').slowMotion = bs.getSharedObject(
                                 'globals').slowMotion == False
                             commandSuccess = True
 
-                        elif m == '/end':
+                        elif m == 'end':
                             try:
                                 bsInternal._getForegroundHostActivity().endGame()
                                 commandSuccess = True
@@ -901,24 +917,24 @@ class chatOptions(object):
                                 pass
 
                         elif level > 2:
-                            if m == '/quit':
+                            if m == 'quit':
                                 commandSuccess = True
                                 bsInternal.quit()
-                            elif m == '/autoadmin' and level > 3:
+                            elif m == 'autoadmin' and level > 3:
                                 if a == []:
                                     val = "1"
                                 else:
                                     val = str(a[0])
                                 AutoAdmin.admin(val)
                                 commandSuccess = True
-                            elif m == '/autovip' and level > 3:
+                            elif m == 'autovip' and level > 3:
                                 if a == []:
                                     val = "2"
                                 else:
                                     val = str(a[0])
                                 AutoAdmin.vip(val)
                                 commandSuccess = True
-                            elif m == '/kick':
+                            elif m == 'kick':
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /kick name or number of list')
@@ -934,7 +950,7 @@ class chatOptions(object):
                                         self.kickByNick(a[0])
                                         commandSuccess = True
 
-                            elif m == '/admin' and level > 3:
+                            elif m == 'admin' and level > 3:
                                 if a == []:
                                     bs.screenMessage(
                                         'Format: /admin <clietnID> <add / remove>')
@@ -965,7 +981,7 @@ class chatOptions(object):
                                             bs.screenMessage(
                                                 u"{} No posee este rol".format(n.getName(True)))
 
-                            elif m == '/vip' and level > 2:
+                            elif m == 'vip' and level > 2:
                                 if a == []:
                                     bs.screenMessage(
                                         'Format: /vip <clietnID> <add / remove>')
@@ -995,7 +1011,7 @@ class chatOptions(object):
                                             bs.screenMessage(
                                                 u"{} No posee este rol".format(n.getName(True)))
 
-                            elif m == '/remove':
+                            elif m == 'remove':
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /remove all or number of list')
@@ -1012,9 +1028,9 @@ class chatOptions(object):
                                         a[0])].removeFromGame()
                                     commandSuccess = True
 
-                            elif m in ('/hug', '/hugall'):
+                            elif m in ('hug', 'hugall'):
                                 try:
-                                    if m == '/hugall':
+                                    if m == 'hugall':
                                         try:
                                             bsInternal._getForegroundHostActivity(
                                             ).players[0].actor.node.holdNode = bsInternal._getForegroundHostActivity().players[1].actor.node
@@ -1067,7 +1083,7 @@ class chatOptions(object):
                                 except:
                                     bs.screenMessage('Error!', color=(1, 0, 0))
 
-                            elif m == '/tint':
+                            elif m == 'tint':
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /tint R G B')
@@ -1093,11 +1109,11 @@ class chatOptions(object):
                                         bs.screenMessage(
                                             'Error!', color=(1, 0, 0))
 
-                            elif m == '/pause':
+                            elif m == 'pause':
                                 bs.getSharedObject('globals').paused = bs.getSharedObject(
                                     'globals').paused == False
                                 commandSuccess = True
-                            elif m == '/cameraMode':
+                            elif m == 'cameraMode':
                                 try:
                                     if bs.getSharedObject('globals').cameraMode == 'follow':
                                         bs.getSharedObject(
@@ -1109,7 +1125,7 @@ class chatOptions(object):
                                 except:
                                     pass
 
-                            elif m == '/lm':
+                            elif m == 'lm':
                                 arr = []
                                 for i in range(100):
                                     try:
@@ -1123,7 +1139,7 @@ class chatOptions(object):
                                     bsInternal._chatMessage(i)
 
                                 commandSuccess = True
-                            elif m == '/gp':
+                            elif m == 'gp':
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /gp number of list')
@@ -1136,12 +1152,12 @@ class chatOptions(object):
                                             pass
 
                                     commandSuccess = True
-                            elif m == '/icy':
+                            elif m == 'icy':
                                 bsInternal._getForegroundHostActivity().players[int(
                                     a[0])].actor.node = bsInternal._getForegroundHostActivity().players[int(a[1])].actor.node
                                 commandSuccess = True
-                            elif m in ('/fly', '/flyall'):
-                                if m == '/flyall':
+                            elif m in ('fly', 'flyall'):
+                                if m == 'flyall':
                                     for i in bsInternal._getForegroundHostActivity().players:
                                         i.actor.node.fly = True
 
@@ -1158,10 +1174,10 @@ class chatOptions(object):
                                         bsInternal._chatMessage(
                                             'Failed!!! Usage: /flyall or /fly number of list')
 
-                            elif m == '/floorReflection':
+                            elif m == 'floorReflection':
                                 bs.getSharedObject('globals').floorReflection = bs.getSharedObject(
                                     'globals').floorReflection == False
-                            elif m == '/ac':
+                            elif m == 'ac':
                                 if a == []:
                                     bsInternal._chatMessage('Using: /ac R G B')
                                     bsInternal._chatMessage('OR')
@@ -1184,7 +1200,7 @@ class chatOptions(object):
                                         bs.screenMessage(
                                             'Error!', color=(1, 0, 0))
 
-                            elif m == '/iceOff':
+                            elif m == 'iceOff':
                                 try:
                                     activity.getMap().node.materials = [
                                         bs.getSharedObject('footingMaterial')]
@@ -1203,7 +1219,7 @@ class chatOptions(object):
                                         i.actor.node.hockey = False
 
                                 commandSuccess = True
-                            elif m == '/maxPlayers' and level > 3:
+                            elif m == 'maxPlayers' and level > 3:
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /maxPlayers count of players')
@@ -1220,8 +1236,8 @@ class chatOptions(object):
                                             'Error!', color=(1, 0, 0))
 
                                     commandSuccess = True
-                            elif m in ('/heal', '/healall'):
-                                if m == '/healall':
+                            elif m in ('heal', 'healall'):
+                                if m == 'healall':
                                     for i in bs.getActivity().players:
                                         try:
                                             if i.actor.exists():
@@ -1244,7 +1260,7 @@ class chatOptions(object):
                                         bsInternal._chatMessage(
                                             'Failed!! Usage: /healall or /heal number of list')
 
-                            elif m == '/gm':
+                            elif m == 'gm':
                                 try:
                                     if a == []:
                                         for i in range(len(activity.players)):
@@ -1266,7 +1282,7 @@ class chatOptions(object):
                                 except:
                                     bsInternal._chatMessage('PLAYER NOT FOUND')
 
-                            elif m == '/reflections':
+                            elif m == 'reflections':
                                 if len(a) < 2:
                                     bsInternal._chatMessage(
                                         'Usage: /reflections type(1/0) scale')
@@ -1305,7 +1321,7 @@ class chatOptions(object):
 
                                     commandSuccess = True
 
-                            elif m == '/shatter':
+                            elif m == 'shatter':
                                 if a == []:
                                     bsInternal._chatMessage(
                                         'Using: /shatter all or number of list')
@@ -1424,7 +1440,7 @@ class chatOptions(object):
                                         0: bs.getSharedObject('globals').vignetteOuter, 100: std})
 
                                 bs.gameTimer(time, bs.Call(off))
-                            elif m == '/help':
+                            elif m == 'help':
                                 bsInternal._chatMessage(
                                     bs.Lstr(resource='comandos publicos y comprados').evaluate())
                                 bsInternal._chatMessage(
@@ -1476,7 +1492,7 @@ class chatOptions(object):
                                 bsInternal._chatMessage(
                                     bs.Lstr(resource='/heal 0 /healall(curar)').evaluate())
                             elif level > 3:
-                                if m == '/partyname':
+                                if m == 'partyname':
                                     if True:
                                         if a == []:
                                             bsInternal._chatMessage(
@@ -1494,7 +1510,7 @@ class chatOptions(object):
                                                 bs.screenMessage(
                                                     'failed to change')
 
-                                elif m == '/settings':
+                                elif m == 'settings':
                                     if a == []:
                                         bsInternal._chatMessage(
                                             "Usage /settings (number in list) (0,1)")
@@ -1521,7 +1537,7 @@ class chatOptions(object):
                                         cmdsetg.nM(t)
                                         commandSuccess = True
 
-                                elif m == '/public':
+                                elif m == 'public':
                                     if True:
                                         if a == []:
                                             bsInternal._chatMessage(
@@ -1552,7 +1568,7 @@ class chatOptions(object):
                                             bsInternal._chatMessage(
                                                 'Usage: /public 0 or 1')
 
-                                elif m == '/ban':
+                                elif m == 'ban':
                                     if a != []:
                                         bannedId = None
                                         aid = None
@@ -1584,7 +1600,7 @@ class chatOptions(object):
                                             bsInternal._chatMessage(
                                                 'player not found')
 
-                                elif m == '/whois':
+                                elif m == 'whois':
                                     try:
                                         clID = int(a[0])
                                         ID = ''
@@ -1607,7 +1623,7 @@ class chatOptions(object):
                                     except:
                                         print 'who is exception'
 
-                                elif m == '/text':
+                                elif m == 'text':
                                     from BsTextOnMap import texts
                                     if a == []:
                                         bsInternal._chatMessage(
@@ -1660,7 +1676,7 @@ class chatOptions(object):
                                     else:
                                         bsInternal._chatMessage(
                                             "Usage: /text showall or /text add [text] or /text del [textnumber]")
-                                elif m == '/whoinqueue':
+                                elif m == 'whoinqueue':
                                     def _onQueueQueryResult(result):
                                         # print result, ' is result'
                                         inQueue = result['e']

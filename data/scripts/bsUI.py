@@ -23825,17 +23825,19 @@ class StoreWindow(Window):
 # Should filter and return the string to be displayed,
 # or return None to ignore the message.
 def _filterChatMessage(msg, clientID):
+    import chatCmd
     import settings
-
+    import filter
+    import spamProtection
+    import coinSystem
+    prefix = tuple([prefix for prefix in settings.prefixComand])
     if clientID != -1:
       if settings.spamProtection:
-	import spamProtection
-	if spamProtection.checkSpam(clientID) == False: return None
-    if msg.startswith('/'):
-	import chatCmd
-	chatCmd.cmd(msg,clientID)
-	return msg
-    import filter
+        if spamProtection.checkSpam(clientID) == False: 
+            return None
+    if msg.startswith(prefix):
+        chatCmd.cmd(msg,clientID)
+        return msg
     for word in filter.f_words:
         if word in msg.lower():
             filter.k(clientID)
@@ -23843,10 +23845,9 @@ def _filterChatMessage(msg, clientID):
             filter.check(clientID)
             msg = "**Restricted Words**"
     if settings.enableCoinSystem:
-	import coinSystem
-	if msg.lower() == coinSystem.correctAnswer:
-		coinSystem.checkAnswer(msg,clientID)
-		return None
+        if msg.lower() == coinSystem.correctAnswer:
+            coinSystem.checkAnswer(msg,clientID)
+            return None
     return msg
     
 
