@@ -6,7 +6,7 @@ date = datetime.now().strftime('%d')
 
 
 # Add New Prefix Commands:
-prefixComand = ('/', '.', '-', '*', ',', '#')
+prefixComand = ('/', '.', '-', '*', ',', '#', '!', '?', ';')
 
 enableTop5effects = True
 enableTop5commands = False
@@ -44,35 +44,35 @@ questionsList = {'Que fruta se come en nochevieja?': 'uvas', 'Que les dejamos a 
                  'add': None,
                  'multiply': None}
 
-availableCommands = {'/nv': 50,
-                     '/ooh': 1,
-                     '/playSound': 10,
-                     '/box': 30,
-                     '/boxall': 60,
-                     '/spaz': 50,
-                     '/spazall': 100,
-                     '/inv': 400,
-                     '/invall': 800,
-                     '/tex': 10,
-                     '/texall': 40,
-                     '/freeze': 600,
-                     '/freezeall': 1000,
-                     '/sleep': 400,
-                     '/sleepall': 800,
-                     '/thaw': 50,
-                     '/thawall': 70,
-                     '/kill': 800,
-                     '/killall': 1050,
-                     '/end': 250,
-                     '/hug': 60,
-                     '/hugall': 100,
-                     '/tint': 999999,
-                     '/sm': 500,
-                     '/fly': 500,
-                     '/flyall': 1000,
-                     '/heal': 50,
-                     '/healall': 70,
-                     '/gm': 1000}
+availableCommands = {'nv': 50,
+                     'ooh': 1,
+                     'playSound': 10,
+                     'box': 30,
+                     'boxall': 60,
+                     'spaz': 50,
+                     'spazall': 100,
+                     'inv': 400,
+                     'invall': 800,
+                     'tex': 10,
+                     'texall': 40,
+                     'freeze': 600,
+                     'freezeall': 1000,
+                     'sleep': 400,
+                     'sleepall': 800,
+                     'thaw': 50,
+                     'thawall': 70,
+                     'kill': 800,
+                     'killall': 1050,
+                     'end': 250,
+                     'hug': 60,
+                     'hugall': 100,
+                     'tint': 999999,
+                     'sm': 500,
+                     'fly': 500,
+                     'flyall': 1000,
+                     'heal': 50,
+                     'healall': 70,
+                     'gm': 1000}
 
 availableEffects = {'ice': 500,
                     'sweat': 750,
