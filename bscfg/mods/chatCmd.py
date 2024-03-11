@@ -34,46 +34,38 @@ def extract_command(msg):
             
 def accountIDFromClientID(n):
     """retorna el account_id del jugador"""
-    if len(n) == 3:
+    if len(n) > 1:
         for i in bsInternal._getForegroundHostActivity().players:
             if int(i.getInputDevice().getClientID()) == int(n):
                 return i.get_account_id()
-            
-    if len(n) == 2:
-        for i in bsInternal._getForegroundHostActivity().players:
-            if int(i.getInputDevice().getClientID()) == int(n):
-                return i.get_account_id()
-            
-    if int(n) < len(bsInternal._getForegroundHostActivity().players):
-        return bsInternal._getForegroundHostActivity().players[int(n)].get_account_id()
+    else:
+        if int(n) < len(bsInternal._getForegroundHostActivity().players):
+            return bsInternal._getForegroundHostActivity().players[int(n)].get_account_id()
     
     
-    return
+    return None
 
 
 def getDisplayString(n):
+    """Retorna el name del jugador"""
     for i in bsInternal._getGameRoster():
         if i['clientID'] == int(n):
             return i['displayString']
-    else:
-        return None
+
+    return None
 
 
 def playerFromClientID(n):
-    if n.isdigit():
-        if len(n) == 3:
-            for i in bsInternal._getForegroundHostActivity().players:
-                if str(i.getInputDevice().getClientID()) == n:
-                    return i
-        if len(n) == 2:
-            for i in bsInternal._getForegroundHostActivity().players:
-                if str(i.getInputDevice().getClientID()) == n:
-                    return i
-                
+    """Retorna el jugador indexado"""
+    if len(n) > 1:
+        for i in bsInternal._getForegroundHostActivity().players:
+            if str(i.getInputDevice().getClientID()) == n:
+                return i
+    else:
         if int(n) < len(bsInternal._getForegroundHostActivity().players):
             return bsInternal._getForegroundHostActivity().players[int(n)]
-    else:
-        return
+    
+    return None #'Player Not Found'
 
 
 class Custom(object):
@@ -146,7 +138,33 @@ class chatOptions(object):
             pass
 
         return 0
-
+    def get_stats(self):
+        with open(pStats, 'r') as f:
+            try:
+                _stats = json.loads(f.read())
+            except:
+                return 'Stats file not found'
+        return _stats
+    
+    def me(self, player):
+        pats = self.get_stats()
+        if isistance(player, bs.Player):
+            accountid = player.get_account_id()
+            clientid = player.getInputDevice().getClientID()
+        if not accountid in pats:
+            return 'Player not Found'
+        if enableCoinSystem:
+            haveCoins = coinSystem.getCoins(accountID)
+            string = '|| ' + player.getName() + ' | Wallet:' + bs.getSpecialChar('ticket') + str(haveCoins) + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(
+                accountID)]['games'] + ' | Score:' + pats[str(accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
+        else:
+            string = '|| ' + player.getName() + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(accountID)]['games'] + ' | Score:' + pats[str(
+                accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
+        #bsInternal._chatMessage(string)
+        bs.screenMessage(string, transient=True, clients=[clientid])
+        
+        
+        
     def kickByNick(self, nick):
         roster = bsInternal._getGameRoster()
         for i in roster:
@@ -166,31 +184,18 @@ class chatOptions(object):
             a = msg.split(' ')[1:]
             activity = bsInternal._getForegroundHostActivity()
             with bs.Context(activity):
+                for i in activity.players:
+                    if i.getInputDevice().getClientID() == clientID:
+                        player = i
+                        break
+                else:
+                    return
+                if player is None:
+                    return
                 level = self.checkDevice(clientID, m)
                 if m in ('stats', 'rank', 'myself', 'me'):
-                    for player in activity.players:
-                        if player.getInputDevice().getClientID() == clientID:
-                            f = open(pStats, 'r')
-                            pats = json.loads(f.read())
-                            accountID = player.get_account_id()
-                            # if enableCoinSystem: haveCoins = coinSystem.getCoins(accountID)
-                            if accountID in pats:
-                                if enableCoinSystem:
-                                    haveCoins = coinSystem.getCoins(accountID)
-                                    string = '|| ' + player.getName() + ' | Wallet:' + bs.getSpecialChar('ticket') + str(haveCoins) + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(
-                                        accountID)]['games'] + ' | Score:' + pats[str(accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
-                                else:
-                                    string = '|| ' + player.getName() + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(accountID)]['games'] + ' | Score:' + pats[str(
-                                        accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
-                                bsInternal._chatMessage(string)
-
-                                # bsInternal._chatMessage('|| ' + player.getName() + ' | Wallet:' + bs.getSpecialChar('ticket') + str(haveCoins) + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(accountID)]['games'] + ' | Score:' + pats[str(accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||')
-                            else:
-                                bsInternal._chatMessage(
-                                    'The player ' + str(player.getName()) + ' is not yet registered')
-                            f.close()
-                            break
-
+                    if a is None:
+                        self.me(player)
                 elif (m == 'emote') or (m == 'em'):
                     if a == []:
                         bs.screenMessage(

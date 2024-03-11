@@ -3,6 +3,7 @@ import bs
 import bsUI
 import os
 import bsInternal
+import time
 import json
 from threading import Timer
 from random import randrange
@@ -20,7 +21,6 @@ def _customer():
     if os.path.exists(customer):
         with open(customer) as f:
             _customer = json.loads(f.read())
-            f.close()
             storage.customers = _customer
     return storage.customers
 
@@ -29,7 +29,6 @@ def commit_custom():
     if os.path.exists(customer):
         with open(customer, 'w') as f:
             f.write(json.dumps(storage.customers, indent=4))
-            f.close()
 
 
 # items = _customer()
@@ -42,24 +41,38 @@ def commit_custom():
 #             items[item]['tag'] = ""
 #             items.pop(i)
 
-
+#sprint(storage.customers.keys())
 def checkExpiredItems():
+    now = datetime.now()
     items = storage.customers
     flag = 0
-    for item in items:
-        for i, e in items[item]["effects"].items():
-            now = datetime.now()
+    expired = []
+    for key, value in items.items():
+        for i, e in value["effects"].items():
             expiry = datetime.strptime(e, '%d-%m-%Y %H:%M:%S')
             if expiry < now:
-                print 'expired item found'
-                flag = 1
-                if i == "tag":
-                    items[item]['tag'] = ""
-                items[item]['effects'].pop(i)
+                if value["effects"] != {}:
+                    #print(key, " remove: ", i)
+                    value["effects"].pop(i)
+                    flag=1
+                    
+        # Comprueba los que no poseen efectos.
+        if value["effects"] == {}:
+            #print("vacio")
+            # agregalo a lista de jugadores sin efectos.
+            expired.append(key)
+            
+    # Comprueba de que la lista no este vacia.
+    if expired:
+        # Remuevelo.
+        for id in expired:
+            items.pop(id)
+            flag=1
+            #print("remove: ", id)
+    
+    # Guarda los cambios.       
     if flag == 1:
         commit_custom()
-
-
 def askQuestion():
     global answeredBy
     global correctAnswer
@@ -120,7 +133,7 @@ def addCoins(accountID, amount):
         bank[accountID] = 0
     bank[accountID] += amount
     with open(bankfile, 'w') as f:
-        f.write(json.dumps(bank))
+        f.write(json.dumps(bank, indent=4))
     if amount > 0:
         bs.playSound(bs.getSound('cashRegister'))
     print 'Transaction successful'
