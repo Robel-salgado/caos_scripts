@@ -34,7 +34,7 @@ def extract_command(msg):
             
 def accountIDFromClientID(n):
     """retorna el account_id del jugador"""
-    if len(n) > 1:
+    if len(str(n)) > 1:
         for i in bsInternal._getForegroundHostActivity().players:
             if int(i.getInputDevice().getClientID()) == int(n):
                 return i.get_account_id()
@@ -138,32 +138,93 @@ class chatOptions(object):
             pass
 
         return 0
-    def get_stats(self):
+    def get_playerstats(self):
         with open(pStats, 'r') as f:
             try:
                 _stats = json.loads(f.read())
-            except:
-                return 'Stats file not found'
+            except Exception:
+                return None
         return _stats
-    
-    def me(self, player):
-        pats = self.get_stats()
-        if isistance(player, bs.Player):
-            accountid = player.get_account_id()
-            clientid = player.getInputDevice().getClientID()
-        if not accountid in pats:
-            return 'Player not Found'
-        if enableCoinSystem:
+    def getstats(self):
+        with open(stats, 'r') as f:
+            try:
+                _stats = json.loads(f.read())
+            except Exception:
+                return None
+        return _stats
+    def scoretocash(self, player, score, clientID):
+        try:
+            stat = self.getstats()
+            accountID = player.get_account_id()
+            haveScore = stat[str(accountID)]['scores']
+            if haveScore < score:
+                bsInternal._chatMessage('Not enough scores to perform the transaction')
+            elif score < 500:
+                bsInternal._chatMessage('You can only convert more than 500scores')
+            else:
+                stat[str(accountID)]['scores'] -= score
+                mystats.commit_stats(stat)
+                equivalentCoins = int(score / 5 * 0.9)
+                coinSystem.addCoins(accountID, equivalentCoins)
+                bs.screenMessage('Transaction Successful', color=(0, 1, 0))
+                bsInternal._chatMessage(bs.getSpecialChar('ticket') + str(equivalentCoins) + ' added to your account. [10% transaction fee deducted]')
+                mystats.refreshStats()
+
+        except Exception as e:
+            print(e)
+            bs.screenMessage('Usage: /scoretocash amount_of_score', transient=True, color=(1,
+                                                                                0.1,
+                                                                                0.1), clients=[clientID])
+    def cashtoscore(self, player, coins, clientID):
+        try:
+            stat = self.getstats()
+            accountID = player.get_account_id()
             haveCoins = coinSystem.getCoins(accountID)
-            string = '|| ' + player.getName() + ' | Wallet:' + bs.getSpecialChar('ticket') + str(haveCoins) + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(
-                accountID)]['games'] + ' | Score:' + pats[str(accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
+            if haveCoins < coins:
+                bsInternal._chatMessage(
+                    'Not enough ' + bs.getSpecialChar('ticket') + ' to perform the transaction')
+            elif coins < 100:
+                bsInternal._chatMessage(
+                    'You can only convert more than ' + bs.getSpecialChar('ticket') + '100')
+            else:
+                coinSystem.addCoins(accountID, coins * -1)
+                equivalentScore = int(coins * 5 * 0.9)
+                stat[str(accountID)]['scores'] += equivalentScore
+                mystats.commit_stats(stat)
+                bs.screenMessage(
+                    'Transaction Successful', color=(0, 1, 0))
+                bsInternal._chatMessage(str(
+                    equivalentScore) + 'score added to your account stats. [10% transaction fee deducted]')
+                mystats.refreshStats()
+
+        except Exception as e:
+            print e
+            bs.screenMessage('Usage: /cashtoscore amount_of_cash', transient=True, color=(1,
+                                                                                            0.1,
+                                                                                            0.1), clients=[clientID])
+
+
+                        
+    def me(self, player, clientID):
+        pats = self.get_playerstats()
+        accountID = player.get_account_id()
+        string = ""
+        if not isinstance(player, bs.Player):
+            return
+        if accountID in pats:
+            if enableCoinSystem:
+                haveCoins = coinSystem.getCoins(accountID)
+                string = '|| ' + player.getName() + ' | Wallet:' + bs.getSpecialChar('ticket') + str(haveCoins) + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(
+                    accountID)]['games'] + ' | Score:' + pats[str(accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
+            else:
+                string = '|| ' + player.getName() + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(accountID)]['games'] + ' | Score:' + pats[str(
+                    accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
+            #bsInternal._chatMessage(string)
+            
         else:
-            string = '|| ' + player.getName() + ' | Rank:' + pats[str(accountID)]['rank'] + ' | Games:' + pats[str(accountID)]['games'] + ' | Score:' + pats[str(
-                accountID)]['scores'] + ' | Kills:' + pats[str(accountID)]['kills'] + ' | Deaths:' + pats[str(accountID)]['deaths'] + ' ||'
-        #bsInternal._chatMessage(string)
-        bs.screenMessage(string, transient=True, clients=[clientid])
+            string = "No estas registrado."
         
-        
+        bs.screenMessage(string, transient=True, clients=[clientID])
         
     def kickByNick(self, nick):
         roster = bsInternal._getGameRoster()
@@ -194,8 +255,8 @@ class chatOptions(object):
                     return
                 level = self.checkDevice(clientID, m)
                 if m in ('stats', 'rank', 'myself', 'me'):
-                    if a is None:
-                        self.me(player)
+                    if a == []:
+                        self.me(player, clientID)
                 elif (m == 'emote') or (m == 'em'):
                     if a == []:
                         bs.screenMessage(
@@ -240,22 +301,24 @@ class chatOptions(object):
                     if a == []:
                         bs.screenMessage(
                             "Format: /addcoin <clientID> <amount> or /addcoin <amount> for myself")
-                    else:
+                    
                         message = ""
-                        if len(a) == 1:
+                    elif len(a) == 1:
                             n = accountIDFromClientID(clientID)
+                            coin = coinSystem.getCoins(n)
                             coinSystem.addCoins(n, int(a[0]))
-                            message = "Se han Depositado {} a tu Banco.".format(int(a[0]))
-                        elif len(a) == 2:
+                            message = "Se han Depositado {} a tu Banco.".format(a[0])
+                    else:
+                        try:
                             n = accountIDFromClientID(int(a[0]))
                             n2 = playerFromClientID(a[0])
-                            coinSystem.addCoins(n, int(a[1]))
-                            message = "Se han Depositado {} Para {}.".format(int(a[1]), n2.getName())
-                        else:
-                            message = "Error Player no Encontrado."
+                            coinSystem.addCoins(n, int(a[0]))
+                            message = "Se han Depositado {} Para {}.".format(a[1], n2.getName())
+                        except IndexError:
+                            message = "player not found"
                             return
-                        
-                        bs.screenMessage(message)
+                    
+                    bs.screenMessage(message, transient=True, clients=[clientID])
                             
                         
 
@@ -488,72 +551,11 @@ class chatOptions(object):
                                     i.get_account_id())
                                 commandSuccess = True
                 elif m == 'cashtoscore' and enableCoinSystem:
-                    try:
-                        coins = int(a[0])
-                        for player in activity.players:
-                            if player.getInputDevice().getClientID() == clientID:
-                                accountID = player.get_account_id()
-                                haveCoins = coinSystem.getCoins(accountID)
-                            if haveCoins < coins:
-                                bsInternal._chatMessage(
-                                    'Not enough ' + bs.getSpecialChar('ticket') + ' to perform the transaction')
-                            elif coins < 100:
-                                bsInternal._chatMessage(
-                                    'You can only convert more than ' + bs.getSpecialChar('ticket') + '100')
-                            else:
-                                coinSystem.addCoins(accountID, coins * -1)
-                                f = open(stats, 'r')
-                                _stats = json.loads(f.read())
-                                f.close()
-                                equivalentScore = int(coins * 5 * 0.9)
-                                _stats[str(accountID)]['scores'] += equivalentScore
-                                mystats.commit_stats(_stats)
-                                bs.screenMessage(
-                                    'Transaction Successful', color=(0, 1, 0))
-                                f.close()
-                                bsInternal._chatMessage(str(
-                                    equivalentScore) + 'score added to your account stats. [10% transaction fee deducted]')
-                                
-                                mystats.refreshStats()
-                            break
-
-                    except:
-                        bs.screenMessage('Usage: /cashtoscore amount_of_cash', transient=True, color=(1,
-                                                                                                      0.1,
-                                                                                                      0.1), clients=[clientID])
-
+                    if a != []:
+                        self.cashtoscore(player, int(a[0]), clientID)
                 elif m == 'scoretocash' and enableCoinSystem:
-                    try:
-                        score = int(a[0])
-                        for player in activity.players:
-                            if player.getInputDevice().getClientID() == clientID:
-                                f = open(stats, 'r')
-                                s = json.loads(f.read())
-                                accountID = player.get_account_id()
-                                haveScore = s[str(accountID)]['scores']
-                                f.close()
-                                if haveScore < score:
-                                    bsInternal._chatMessage('Not enough scores to perform the transaction')
-                                elif score < 500:
-                                    bsInternal._chatMessage('You can only convert more than 500scores')
-                                else:
-                                    f = open(stats, 'w')
-                                    s[str(accountID)]['scores'] -= score
-                                    mystats.commit_stats(s)
-                                    equivalentCoins = int(score / 5 * 0.9)
-                                    coinSystem.addCoins(accountID, equivalentCoins)
-                                    bs.screenMessage('Transaction Successful', color=(0, 1,
-                                                                                0))
-                                    f.close()
-                                    bsInternal._chatMessage(bs.getSpecialChar('ticket') + str(equivalentCoins) + ' added to your account. [10% transaction fee deducted]')
-                                    mystats.refreshStats()
-                                break
-
-                    except:
-                        bs.screenMessage('Usage: /scoretocash amount_of_score', transient=True, color=(1,
-                                                                                            0.1,
-                                                                                            0.1), clients=[clientID])
-                        
+                    if a != []:
+                        self.scoretocash(player, int(a[0]), clientID)    
 
                 elif level > 0:
                     if m == 'nv':
