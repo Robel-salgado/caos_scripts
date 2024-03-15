@@ -6,7 +6,6 @@ import random
 import json
 import coinSystem
 from threading import Timer
-import AutoAdmin
 from settings import *
 import cmdsetg
 import floater

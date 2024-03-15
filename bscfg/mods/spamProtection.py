@@ -42,7 +42,7 @@ def checkSpam(clientID):
             # bsInternal._chatMessage("Don't spam here!")
             warnCount = warn(ID)
             with bs.Context(bsInternal._getForegroundHostActivity()):
-                bs.screenMessage("Please dont spam",
+                bs.screenMessage("Please dont spam >:|",
                                  transient=True, clients=[clientID])
             return False
             """if warnCount < 2:
@@ -64,4 +64,4 @@ def reset():
 
 
 if settings.spamProtection:
-    timer = bs.Timer(2000, reset, timeType='real', repeat=True)
+    timer = bs.Timer(3000, reset, timeType='real', repeat=True)

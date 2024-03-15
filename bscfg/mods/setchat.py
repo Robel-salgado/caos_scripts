@@ -1,4 +1,5 @@
 import bs
+import openaibs as gpt
 #creted by Blitz Modders
 #Join Our Squad Now
 #You Will Need ChatReply.py From Our Repository
@@ -6,9 +7,9 @@ import bs
 #Msg List
 allow = True
 
-messageList = ['El caos esta en todas partes', 'no pidas rol', "unete al discord"]
+messageList = [f'No Spam{gpt.response}']
 #Msg Timer 
-chatMessageTime = 80 #seconds
+chatMessageTime = 90 #seconds
 #Change According To U
 
 #colors
