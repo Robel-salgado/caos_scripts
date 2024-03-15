@@ -411,12 +411,12 @@ class FootballStadium(Map):
                           'colorTexture':self.preloadData['tex']})
         g = bs.getSharedObject('globals')
 
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         g.tint = (1.3, 1.2, 1.0)
         g.ambientColor = (1.3, 1.2, 1.0)
@@ -628,12 +628,12 @@ class RoundaboutMap(Map):
             'bumper':True})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """"""def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)""""""
 
         bsGlobals.tint = (1.0, 1.05, 1.1)
         bsGlobals.ambientColor = (1.0, 1.05, 1.1)
@@ -828,12 +828,12 @@ class ThePadMap(Map):
             'colorTexture':self.preloadData['vrFillMoundTex']})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """"""def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)""""""
 
         bsGlobals.tint = (1.1, 1.1, 1.0)
         bsGlobals.ambientColor = (1.1, 1.1, 1.0)
@@ -892,12 +892,12 @@ class DoomShroomMap(Map):
                          bs.getSharedObject('deathMaterial')]})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         bsGlobals.tint = (0.82, 1.10, 1.15)
         bsGlobals.ambientColor = (0.9, 1.3, 1.1)
@@ -1152,12 +1152,12 @@ class TowerDMap(Map):
             'affectBGDynamics':False,
             'materials':[self.preloadData['playerWallMaterial']]})
         bsGlobals = bs.getSharedObject('globals')
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         bsGlobals.tint = (1.15, 1.11, 1.03)
         bsGlobals.ambientColor = (1.2, 1.1, 1.0)
@@ -1309,12 +1309,12 @@ class StepRightUpMap(Map):
             'colorTexture':self.preloadData['bgTex']})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         bsGlobals.tint = (1.2, 1.1, 1.0)
         bsGlobals.ambientColor = (1.2, 1.1, 1.0)
@@ -1389,12 +1389,12 @@ class CourtyardMap(Map):
                 'materials':[self.preloadData['playerWallMaterial']]})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         bsGlobals.tint = (1.2, 1.17, 1.1)
         bsGlobals.ambientColor = (1.2, 1.17, 1.1)
@@ -1469,12 +1469,12 @@ class RampageMap(Map):
             'bumper':True})
         bsGlobals = bs.getSharedObject('globals')
 
-        def snowfall():
+        """def snowfall():
             p = (-10+(random.random()*30),15,-10+(random.random()*30))
             v = ((-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0), -50.0,(-5.0+random.random()*30.0) * (-1.0 if p[0] > 0 else 1.0))
             bs.emitBGDynamics(position=p,velocity=v,count=10,scale=1+random.random(),spread=0,chunkType='spark')
         
-        bs.gameTimer(20,bs.Call(snowfall),repeat = True)
+        bs.gameTimer(20,bs.Call(snowfall),repeat = True)"""
 
         bsGlobals.tint = (1.2, 1.1, 0.97)
         bsGlobals.ambientColor = (1.3, 1.2, 1.03)
