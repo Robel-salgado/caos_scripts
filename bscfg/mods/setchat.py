@@ -7,7 +7,7 @@ import openaibs as gpt
 #Msg List
 allow = True
 
-messageList = [f'No Spam{gpt.response}']
+messageList = ['No Spam', {gpt.response}]
 #Msg Timer 
 chatMessageTime = 90 #seconds
 #Change According To U
